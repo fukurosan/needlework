@@ -1,6 +1,6 @@
 {
   "name": "needlework",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A fully automated multi-threading utility for JavaScript",
   "main": "./dist/needlework.js",
   "module": "./dist/needlework.js",
