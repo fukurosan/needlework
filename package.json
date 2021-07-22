@@ -1,6 +1,6 @@
 {
   "name": "needlework",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A fully automated multi-threading utility for JavaScript",
   "main": "./dist/needlework.js",
   "module": "./dist/needlework.js",
@@ -28,8 +28,8 @@
   ],
   "author": "Henrik Olofsson",
   "license": "MIT",
-  "dependencies": {
-    "rollup": "^2.53.2",
+  "devDependencies": {
+    "rollup": "^2.53.3",
     "rollup-plugin-terser": "^7.0.2"
   }
 }
