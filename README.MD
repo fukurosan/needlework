@@ -3,6 +3,11 @@ Needlework is a compact library that enables effortless multi-threading in JavaS
 
 Needlework works in all evergreen browsers as well as any NodeJS version with support for worker_threads.
 
+Try it out!
+```bash
+npm install needlework
+```
+
 # How to
 Needlework enhances the built-in Function prototype in your JavaScript project by attaching a series of new functions that are internally managed by Needlwork. This means that you do not need to deal with creating worker objects, terminating workers after execution, nor do you need to keep track of how many threads are running at any given point in time. This is instead all handled for you.
 

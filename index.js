@@ -173,7 +173,7 @@
         `
             const workerInterface = {}
             const worker = new this.Worker(code, { eval: true })
-            worker.on("message", (...args) => workerInterface.onmessage(...args))
+            worker.on("message", (message) => workerInterface.onmessage({ data: message }))
             worker.on("error", (...args) => workerInterface.onerror(...args))
             workerInterface.postMessage = (...args) => worker.postMessage(...args)
             workerInterface.terminate = () => worker.terminate()
