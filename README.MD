@@ -13,17 +13,15 @@ Check out this example:
 import "needlework"
 
 function heavyWork(numberOne, numberTwo) {
-    const start = Date.now()
-    while(start + 500 > Date.now()) {}
     return numberOne + numberTwo
 }
 
-let resultPromises = []
-for(let i = 0; i < 10; i++) {
-    resultPromises.push(heavyWork.runThread(i, i))
-}
-Promise.all(resultPromises).then(results => {
-    console.log(results) // -> [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
+//Execute in main thread (blocking)
+console.log(heavyWork(1, 2))
+
+//Execute in separate thread (non-blocking)
+heavyWork.runThread(1, 2).then(result => {
+    console.log(result) // -> 3
 })
 ```
 
