@@ -1,7 +1,7 @@
 /** @preserve @license @cc_on
  * ----------------------------------------------------------
- * needlework version 0.0.1
- * A multi-threading library for JavaScript
+ * needlework version 0.0.3
+ * A fully automated multi-threading utility for JavaScript
  * Copyright (c) 2021 Henrik Olofsson
  * All Rights Reserved. MIT License
  * https://mit-license.org/
