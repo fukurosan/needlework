@@ -5,13 +5,56 @@ function someHeavyFunction(numberOne, numberTwo) {
     while (start + 500 > Date.now()) { }
     return numberOne + numberTwo
 }
-console.time("Threaded Work")
-const promises = []
-for (let i = 0; i < 200; i++) {
-    promises.push(someHeavyFunction.runThread(i, i).then(result => {
-        console.log("Thread Completed: " + i)
-    }))
+
+//Single execution test
+const singleExecution = async () => {
+    const promises = []
+    console.time("Threaded Work - Single Execution")
+    for (let i = 0; i < 50; i++) {
+        promises.push(someHeavyFunction.runThread(i, i).then(result => {
+            console.log("Thread Completed: " + i)
+        }))
+    }
+    await Promise.all(promises)
+    console.timeEnd("Threaded Work - Single Execution")
+    someHeavyFunction.terminateThreads()
 }
-Promise.all(promises).then(() => {
-    console.timeEnd("Threaded Work")
-})
+
+//Multi Execution Test
+const multiExectution = async () => {
+    const promises = []
+    console.time("Threaded Work - Multi Execution")
+    for (let i = 0; i < 50; i += 3) {
+        promises.push(someHeavyFunction.runManyInThread(
+            [i, i],
+            [i + 1, i + 1],
+            [i + 2, i + 2]
+        ).then(result => {
+            console.log(`Threads Completed: ${i} ${i + 1} ${i + 2}`)
+        }))
+    }
+    await Promise.all(promises)
+    console.timeEnd("Threaded Work - Multi Execution")
+    someHeavyFunction.terminateThreads()
+}
+
+//Dependency execution test
+const innerReference = () => "World"
+const reference = () => "Hello " + innerReference()
+const functionWithReference = () => {
+    return reference()
+}
+functionWithReference._needlework = { dependencies: { reference } }
+reference._needlework = { dependencies: { innerReference } }
+
+const dependencyExecution = async () => {
+    await functionWithReference.runThread()
+    functionWithReference.terminateThreads()
+}
+
+const run = async () => {
+    await singleExecution()
+    await multiExectution()
+    await dependencyExecution()
+}
+run()

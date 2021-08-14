@@ -6,7 +6,7 @@ function someHeavyFunction(numberOne, numberTwo) {
     return numberOne + numberTwo
 }
 console.time("Sync Work")
-for (let i = 0; i < 200; i++) {
+for (let i = 0; i < 50; i++) {
     someHeavyFunction()
     console.log("Iteration Completed: " + i)
 }
