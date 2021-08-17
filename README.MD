@@ -83,13 +83,15 @@ doSomething._needlework = {
     dependencies: {
         //The below results in:
         //var someVariable = { something: 1 }
-        someVariable: someVariable
+        [someVariable.name]: someVariable
     },
 }
 
 //This will now work, because the dependencies are mapped
 doSomething.runThread() // -> 2
 ```
+
+Note the syntax "[someVariable.name]: someVariable" that is used instead of "someVariable: someVariable". It is recommended to use the above syntax, because it stops you from running into strange errors with minifiers that mangle your function names, and inadvertantly end up breaking your depdency tree.
 
 # Execute a function many times (with better performance)
 If you need to execute a function many times then you can potentially speed it up by passing all execution arguments simultaneously.
@@ -123,8 +125,19 @@ myFn.runThread()
 myFn.terminateThreads()
 ```
 
+If you want, you can also set the allowed idle time before threads are automatically terminated. If you set this to 0 threads will never automatically terminate. Note that this can cause memory leaks, so in that case it is up to you to ensure that workers are terminated when necessary.
+
+```javascript
+Function.prototype.setThreadMaxIdleTime(60000) //60 000ms, 60s
+```
+
 # Max thread count
 Needlework computes an estimated max thread count. This is sometimes useful ti know when writing algorithms where you want to process information in batches. Needlework will never execute more threads in parallel than the max thread count.
 ```javascript
 Function.prototype.getMaxThreadCount()
+```
+
+You can also manually override the maximum thread count:
+```javascript
+Function.prototype.setMaxThreadCount(2) //No more than two threads will ever run in parallel
 ```

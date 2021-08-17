@@ -17,6 +17,14 @@
             return this.maxThreads
         }
 
+        setMaxThreadCount(maxThreadCount) {
+            this.maxThreads = maxThreadCount
+        }
+
+        setThreadMaxIdleTime(maxIdleTime) {
+            this.MAXIMUM_IDLE_TIME_MS = maxIdleTime
+        }
+
         hasNext() {
             return !!this.threadQueue.length
         }
@@ -162,9 +170,11 @@
             metaData.freeThreads.push(thread)
             metaData.pendingTasks--
             if (!metaData.pendingTasks) {
-                metaData.terminationTimeout = setTimeout(() => {
-                    this.terminate(fn)
-                }, this.MAXIMUM_IDLE_TIME_MS)
+                if (this.MAXIMUM_IDLE_TIME_MS) {
+                    metaData.terminationTimeout = setTimeout(() => {
+                        this.terminate(fn)
+                    }, this.MAXIMUM_IDLE_TIME_MS)
+                }
             }
         }
     }
@@ -172,7 +182,7 @@
     class BrowserThreadPlanner extends ThreadPlanner {
         constructor() {
             super()
-            this.maxThreads = navigator.hardwareConcurrency - 1
+            this.maxThreads = Math.max(navigator.hardwareConcurrency - 1, 1)
         }
 
         /**
@@ -209,7 +219,7 @@
     class NodeThreadPlanner extends ThreadPlanner {
         constructor() {
             super()
-            this.maxThreads = require("os").cpus().length - 1
+            this.maxThreads = Math.max(require("os").cpus().length - 1, 1)
             this.Worker = require("worker_threads").Worker
         }
 
@@ -289,6 +299,21 @@
      */
     Function.prototype.getMaxThreadCount = function () {
         return threadPlanner.getMaxThreadCount()
+    }
+
+    /**
+     * Sets the maximum number of threads that can be executed in parallel on the host.
+     */
+    Function.prototype.setMaxThreadCount = function (maxThreadCount) {
+        return threadPlanner.setMaxThreadCount(maxThreadCount)
+    }
+
+    /**
+     * Sets the maximum time (in ms) that a thread can be idle before being terminated automatically. 
+     * If set to 0 threads will never terminate.
+     */
+    Function.prototype.setThreadMaxIdleTime = function (maxIdleTime) {
+        return threadPlanner.setThreadMaxIdleTime(maxIdleTime)
     }
 
 })()
