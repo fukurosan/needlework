@@ -201,10 +201,10 @@
             }
                 self.onmessage = async (params) => {
                     let result = []
-                    for(let i = 0; i < params.length; i++) {
-                        result.push(execute(...params[i]))
+                    for(let i = 0; i < params.data.length; i++) {
+                        result.push(execute(...params.data[i]))
                     }
-                    for(let i = 0; i < params.length; i++)
+                    for(let i = 0; i < params.data.length; i++)
                     if(result[i] instanceof Promise) {
                         result[i] = await result[i]
                     }
